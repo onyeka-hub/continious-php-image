@@ -14,6 +14,19 @@ jobs:
     steps:
     - name: Check out the codebase
       uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secret.AWS_ACCESS_KEY_ID }} 
+        aws-secret-access-key: ${{ secret.AWS_SECRET_ACCESS_KEY }} 
+        aws-region: us-east-1
       
-    - name: Build the Docker image
-      run: docker build . -t onyekaonu/continious_php_image
+    - name: Login to ECR
+      run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/s2r1r7x5
+
+    - name: Build, Tag and Push the docker image
+      run: |
+        docker build . -t onyekaonu/continious_php_image
+        docker tag onyekaonu/continious_php_image:latest public.ecr.aws/s2r1r7x5/onyekaonu/continious_php_image:latest
+        docker push public.ecr.aws/s2r1r7x5/onyekaonu/continious_php_image:latest
