@@ -1,3 +1,3 @@
 <html>
-    <?php echo "hello world from onyeka & sunshine" ?>
+    <?php echo "hello world from onyeka" ?>
 </html>
